@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>Admin Panel</title>
+</head>
+<body>
+
+<!-- ====== Шапка ====== -->
+
+<div class="container-fluid">
+  <div class="row align-items-center bg-dark">
+    <div class="col-8">
+      <div class="text-white">
+        <span class="h5"> <strong th:text="${admin.firstName}"></strong></span>
+        <span class="display-5">with roles:</span>
+        <th:block th:each="item : ${admin.getRoles()}"> <span class="display-5" th:text="${item.getAuthority()}"></span></th:block>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="text-right">
+        <div class="nav-link">
+        <span>
+          <a class="text-muted" href=/logout>Logout</a>
+        </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+      <!-- Панель навигации слева (Admin | User)-->
+      <ul class="nav flex-column nav-pills">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/user/{id} (id = ${admin.getId()})}">User</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-10">
+      <div class="d-grid gap-2">
+        <h2>Admin Panel</h2>
+      </div>
+      <!-- Панель навигации верхняя (Users table | New user) -->
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/users}">Users table</a>
+        </li>
+        <li class="nav-item">
+          <span class="nav-link active">New user</span>
+        </li>
+      </ul>
+      <ul class="nav nav-tabs nav-fill">
+        <li class="nav-item">
+          <span class="nav-link active" style="font-weight: bold; text-align: left"><h2>Add new user</h2></span>
+        </li>
+      </ul>
+      <!-- Секция добавления пользователя -->
+      <div class="row px-3">
+        <div class="col-12 p-3" style="border-width: thin; border-style: solid; border-color: lightgray">
+          <div class="row align-items-center">
+            <div class="col-4">
+          </div>
+          <div class="col-4">
+            <form role="form" th:method="post" th:action="@{/admin/user/add}" th:object="${user}">
+              <div class="form-group" style="text-align: center; font-weight: bold">
+                <label for="inputFirstName" >
+                  First Name
+                </label>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" th:field="*{firstName}" />
+              </div>
+              <div class="form-group" style="text-align: center; font-weight: bold">
+                <label for="inputLastName" >
+                  Last Name
+                </label>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" th:field="*{lastName}" />
+              </div>
+              <div class="form-group" style="text-align: center; font-weight: bold">
+                <label for="inputPassword" >
+                 Password
+                </label>
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password" th:field="*{password}" />
+              </div>
+              <div class="form-group" style="text-align: center; font-weight: bold">
+                <label for="inputRoles">
+                  Roles
+                </label>
+                <select multiple class="form-control" id="inputRoles" th:field="*{roles}">
+                <th:block th:each="item : ${listRoles}">
+                  <option th:value="${item.role}" th:text="${item.getAuthority()}">TEST1</option>
+                </th:block>
+                </select>
+              </div>
+              <div class="form-group" style="text-align: center">
+                <button type="submit" class="btn btn-success">Add new user</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

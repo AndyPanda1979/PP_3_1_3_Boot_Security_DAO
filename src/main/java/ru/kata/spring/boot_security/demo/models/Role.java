@@ -21,29 +21,24 @@ public class Role implements GrantedAuthority {
         return role;
     }
 
+    @Override
+    public String toString() {return this.role;}
 
-    // конструкторы
+
+    // Конструкторы
     public Role () {}
     public Role(String role) {
         this.role = role;
     }
-
-    @Override
-    public String toString() {
-        return this.role;
-    }
-
     public Role (Long id) {
         this.id = id;
     }
-
     public Role (Long id, String role) {
-        this.id = id;
-        this.role = role;
+        this.id = id; this.role = role;
     }
 
-    // getters / setters
 
+    // Геттеры / Сеттеры
     public void setId(Long id) {
         this.id = id;
     }
