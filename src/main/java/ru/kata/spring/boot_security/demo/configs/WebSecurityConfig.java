@@ -25,13 +25,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin/*").hasRole("ADMIN")
+                .antMatchers("/admin*", "/admin/**").hasRole("ADMIN")
 //                .antMatchers("/").permitAll()             // для этих путей доступ всем
                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin()
                 .successHandler(successUserHandler)
-                .permitAll()
+//                .permitAll()
                 .and()
                 .logout().logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
