@@ -29,7 +29,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional (readOnly = true)
     public List<User> getUsers() {
-        return userDao.findAllUsers();
+
+        List<User>usersList = userDao.findAllUsers();
+        return usersList;
     }
 
     @Override

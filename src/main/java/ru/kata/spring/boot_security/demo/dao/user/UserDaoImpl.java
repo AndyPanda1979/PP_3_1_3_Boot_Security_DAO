@@ -26,15 +26,30 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User findUserById(Long id) {
-        User user = entityManager.find(User.class, id);
-        return user;
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u join fetch u.roles r where u.id = :id", User.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
+
+//    @Override
+//    public User findUserById(Long id) {
+//        User user = entityManager.find(User.class, id);
+//        return user;
+//    }
 
     @Override
     public List<User> findAllUsers() {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
-        return query.getResultList();
+        List<User> proxyUsers = query.getResultList();
+        for (User user: proxyUsers) {
+            for (Role role : user.getRoles()) {
+                TypedQuery<Role> roleQuery = entityManager.createQuery("SELECT r from Role r where r.id = :id", Role.class);
+                roleQuery.setParameter("id", role.getId());
+            }
+        }
+        return proxyUsers;
     }
+
 
     @Override
     public void saveUser(User user) {
@@ -48,13 +63,6 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public void updateUser(User updatedUser) {
-        System.out.println("Хочу посмотреть, что в Update user DAO");
-        System.out.println(updatedUser.getId());
-        System.out.println(updatedUser.getFirstName());
-        System.out.println(updatedUser.getLastName());
-        System.out.println(updatedUser.getPassword());
-        System.out.println(updatedUser.getRoles());
-        System.out.println("***************");
         List<Role> result = new ArrayList<>();
         for (Role role: updatedUser.getRoles()) {
            result.add(roleDao.findRoleByName(role.getAuthority()));
@@ -71,7 +79,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public Optional<User> tryGetUserByUsername(String username) {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u where u.firstName = :username", User.class);
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u join fetch u.roles r where u.firstName = :username", User.class);
         query.setParameter("username", username);
         try {
             Optional <User> rev = Optional.ofNullable(query.getSingleResult());
